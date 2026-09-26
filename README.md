@@ -1,4 +1,3 @@
-
 # 💰 Wallet API
 
 > REST API для работы с кошельками пользователей на FastAPI.
@@ -50,7 +49,7 @@ git clone https://github.com/ТВОЙ_НИК/wallet_api.git
 cd wallet_api
 ```
 
-### 2. Поднять всё одной командой
+### 2. Запустить всё одной командой
 
 ```bash
 docker compose up --build -d
@@ -77,7 +76,7 @@ Swagger UI — [http://localhost:8000/docs](http://localhost:8000/docs)
 | `POST`   | `/api/v1/wallets/{wallet_uuid}/operation` | Пополнить (`DEPOSIT`) или списать (`WITHDRAW`) |
 | `GET`    | `/api/v1/wallets/{wallet_uuid}`           | Получить баланс кошелька                        |
 
-### Пример: пополнение
+### Пример: Пополнение
 
 ```bash
 curl -X POST http://localhost:8000/api/v1/wallets/<UUID>/operation \
@@ -94,7 +93,7 @@ curl -X POST http://localhost:8000/api/v1/wallets/<UUID>/operation \
 }
 ```
 
-### Пример: списание
+### Пример: Списание
 
 ```bash
 curl -X POST http://localhost:8000/api/v1/wallets/<UUID>/operation \
@@ -104,7 +103,7 @@ curl -X POST http://localhost:8000/api/v1/wallets/<UUID>/operation \
 
 Если денег недостаточно — вернётся `400 Недостаточно средств`.
 
-### Пример: получить баланс
+### Пример: Получение баланса
 
 ```bash
 curl http://localhost:8000/api/v1/wallets/<UUID>
@@ -112,10 +111,10 @@ curl http://localhost:8000/api/v1/wallets/<UUID>
 
 ---
 
-## 🔒 Конкурентность
+## 🔒 Избегание ошибок при параллельных запросах
 
-Когда два запроса одновременно меняют баланс одного кошелька, легко получить гонку:
-оба читают старый баланс, оба пишут новый — и одно изменение теряется.
+Когда два запроса одновременно меняют баланс одного кошелька, легко получить ошибку:
+оба запроса проверяют старый баланс, оба пишут новый — и одно изменение теряется.
 
 Решение — блокировка строки на уровне БД:
 
@@ -147,7 +146,7 @@ docker compose exec db psql -U postgres -c "CREATE DATABASE wallets_test;"
 docker compose exec app pytest -v
 ```
 
-Покрыты все эндпоинты, включая негативные сценарии и проверку конкурентности.
+Покрыты все эндпоинты, включая негативные сценарии и проверку паралельных запросов.
 
 ---
 
